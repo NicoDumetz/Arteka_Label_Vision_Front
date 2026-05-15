@@ -21,11 +21,14 @@ import { RouterProvider } from "react-router-dom";
 import "./index.css";
 import { AuthProvider } from "~/contexts/Auth";
 import { router } from "~/router";
+import { MetadataProvider } from "~/contexts/Metadata";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <MetadataProvider>
+        <RouterProvider router={router} />
+      </MetadataProvider>
     </AuthProvider>
   </React.StrictMode>,
 );

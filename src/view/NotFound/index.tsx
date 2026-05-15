@@ -25,9 +25,9 @@ export default function NotFound() {
   return (
     <main className="min-h-screen flex items-center justify-center px-6">
       <section className="max-w-md text-center">
-        <p className="text-sm font-medium text-neutral-500">{status}</p>
-        <h1 className="mt-3 text-3xl font-semibold text-neutral-950">{title}</h1>
-        <p className="mt-4 text-neutral-600">
+        <p className="text-sm font-medium text-white">{status}</p>
+        <h1 className="mt-3 text-3xl font-semibold text-white">{title}</h1>
+        <p className="mt-4 text-white">
           The requested page does not exist or is no longer available.
         </p>
       </section>

@@ -18,29 +18,128 @@
   font-display: swap;
 }
 
-:root {
-  line-height: 1.5;
+@font-face {
+  font-family: "Geist";
+  src: url("/font/Geist/Geist/Geist-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/font/Geist/Geist/Geist-Italic-VariableFont_wght.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Migra";
+  src: url("/font/migra/Migra-Extrabold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Montreal";
+  src: url("/font/neue-montreal/NeueMontreal-Medium.otf") format("opentype");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Montreal";
+  src: url("/font/neue-montreal/NeueMontreal-MediumItalic.otf") format("opentype");
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("/font/tusker-grotesk/TuskerGrotesk-2600Semibold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Zuecos";
+  src: url("/font/zuecos/ZuecosCF-Regular.ttf") format("truetype");
+  font-style: normal;
   font-weight: 400;
-  color: #111827;
-  background-color: #ffffff;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-display: swap;
 }
 
-* {
-  box-sizing: border-box;
+@layer base {
+  :root {
+    color-scheme: dark;
+    /* On force les variables de base pour éviter les erreurs Tailwind */
+    --background: 5 5 5; /* #050505 */
+    --foreground: 255 255 255;
+    --border: 255 255 255 / 0.1;
+  }
+
+  html, body, #root {
+    /* Suppression de @apply border-border qui cause l'erreur */
+    @apply h-full min-h-screen bg-[#050505] text-white font-manrope antialiased;
+    
+    ::selection {
+      @apply bg-primary/30 text-white;
+    }
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-1.5 h-1.5;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-white/10 border border-white/5 hover:bg-primary/50 transition-colors;
+  }
 }
 
-html,
-body,
-#root {
-  min-height: 100%;
-}
+/* Supprime complètement le bloc * { @apply border-border ... } qui est à la fin de ton fichier */
+@layer utilities {
+  .font-manrope-medium {
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+  }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  font-family: "Manrope", system-ui, sans-serif;
+  .font-manrope-bold {
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+  }
+
+  .font-manrope-extrabold {
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+  }
+
+  .font-migra {
+    font-family: "Migra", serif;
+    font-weight: 800;
+  }
+
+  .font-tusker,
+  .font-tusker-grotesk {
+    font-family: "Tusker Grotesk", sans-serif;
+    font-weight: 600;
+  }
+
+  .font-neueMontreal,
+  .font-neue-montreal {
+    font-family: "Neue Montreal", sans-serif;
+    font-weight: 500;
+  }
+
+  .font-zuecos {
+    font-family: "Zuecos", serif;
+    font-weight: 400;
+  }
 }
