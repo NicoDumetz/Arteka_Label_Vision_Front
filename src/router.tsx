@@ -16,10 +16,11 @@
 // =============================================================
 
 import { createBrowserRouter } from "react-router-dom";
-import { RequireAuth, RequireGuest, RequireGlobalRole, RequireProjectRole } from "~/components/RouteGuard";
+import { RequireAuth, RequireGuest } from "~/components/RouteGuard";
 import Home from "~/view/Home";
 import Login from "./view/Login";
 import NotFound from "./view/NotFound";
+import ProjectsPage from "./view/Project";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,14 @@ export const router = createBrowserRouter([
       <RequireGuest>
         <Login/>
       </RequireGuest>
+    ),
+  },
+  {
+    path: "/projects",
+    element: (
+      <RequireAuth>
+        <ProjectsPage/>
+      </RequireAuth>
     ),
   },
   {
