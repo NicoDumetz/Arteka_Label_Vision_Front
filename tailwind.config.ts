@@ -10,64 +10,92 @@ delete colors.blue;
 
 const appColors = {
   ...colors,
-  "dark": "#454545",
-  "dark-blue": "#0E1C36",
-  "dark-shade": "#181D27",
-  "dark-contrast": "#11151C",
-  "subtitle-color": "#9D9F9A",
-  "star": "#FEB63F",
-  info: "#AFCBFF",
-  correct: "#00D291",
-  error: "#FF004D",
-  warning: "#FF3100",
-  white: "#FDFFFC",
-  red: "#92140C",
-  green: "#09814A",
-  blue: "#86BBD8",
-  yellow: "#F6AE2D",
+
   "background": "#0c0c0c",
-  "contrast": "#B7B7B7",
-  "contrast-100": "#F3F3F3",
-  "contrast-200": "#E0E0E0",
-  "contrast-300": "#B7B7B7",
-  "contrast-400": "#A3A3A3",
-  "contrast-500": "#787A76",
-  "contrast-600": "#3A3D38",
-  "contrast-700": "#252625",
-  "primary": "#2700B4",
-  "primary-100": "#E5E5FF",
-  "primary-200": "#A18AFF",
-  "primary-300": "#6B4EFF",
-  "primary-400": "#3F2EFF",
-  "primary-500": "#2700B4",
-  "primary-600": "#1E0090",
-  "primary-700": "#14005C",
-  "secondary": "#00CC8E",
-  "secondary-100": "#EBFFF9",
-  "secondary-200": "#92FFDD",
-  "secondary-300": "#39FFC2",
-  "secondary-400": "#00CC8E",
-  "secondary-500": "#0A996D",
-  "secondary-600": "#027753",
-  "secondary-700": "#00553B",
-  "tertiary": "#B200FF",
-  "tertiary-100": "#F7E5FF",
-  "tertiary-200": "#E6ACFF",
-  "tertiary-300": "#D473FF",
-  "tertiary-400": "#B200FF",
-  "tertiary-500": "#8E00CC",
-  "tertiary-600": "#6B0099",
-  "tertiary-700": "#200033",
-  "quaternary": "#FF004D",
-  "quaternary-100": "#FFE5ED",
-  "quaternary-200": "#FF8AAD",
-  "quaternary-300": "#FF2E6D",
-  "quaternary-400": "#FF004D",
-  "quaternary-500": "#AD0034",
-  "quaternary-600": "#850028",
-  "quaternary-700": "#5C001C",
-  "ghost": "transparent",
-  "ghost-100": "#252524"};
+  "dark-contrast": "#000000",
+  "dark-shade": "#151517",
+  "dark": "#252628",
+  "subtitle-color": "#A3A3A3",
+  "white": "#FFFFFF",
+
+  "info": "#6366F1",
+  "correct": "#00CC8E",
+  "error": "#FF004D",
+  "warning": "#FF9800",
+
+
+  // PRIMARY : Indigo Électrique (Vibrant, hyper lisible sur fond noir)
+  "primary": {
+    DEFAULT: "#6366F1",
+    100: "#E0E7FF",
+    200: "#C7D2FE",
+    300: "#A5B4FC",
+    400: "#818CF8",
+    500: "#6366F1",
+    600: "#4F46E5",
+    700: "#4338CA",
+  },
+
+  // SECONDARY : Vert Émeraude (Validation humaine, statuts "ready", "validated")
+  "secondary": {
+    DEFAULT: "#00CC8E",
+    100: "#EBFFF9",
+    200: "#92FFDD",
+    300: "#39FFC2",
+    400: "#00CC8E",
+    500: "#0A996D",
+    600: "#027753",
+    700: "#00553B",
+  },
+
+  // TERTIARY : Violet (Réservé à l'IA : prédictions, modèles, entraînements)
+  "tertiary": {
+    DEFAULT: "#B200FF",
+    100: "#F7E5FF",
+    200: "#E6ACFF",
+    300: "#D473FF",
+    400: "#B200FF",
+    500: "#8E00CC",
+    600: "#6B0099",
+    700: "#200033",
+  },
+
+  // QUATERNARY : Rouge / Rose vif (Actions destructrices, rejets, delete)
+  "quaternary": {
+    DEFAULT: "#FF004D",
+    100: "#FFE5ED",
+    200: "#FF8AAD",
+    300: "#FF2E6D",
+    400: "#FF004D",
+    500: "#AD0034",
+    600: "#850028",
+    700: "#5C001C",
+  },
+
+  // CONTRASTE : Les gris neutres pour les textes et bordures fines
+  "contrast": {
+    DEFAULT: "#B7B7B7",
+    100: "#F3F3F3",
+    200: "#E0E0E0",
+    300: "#B7B7B7",
+    400: "#A3A3A3",
+    500: "#787A76",
+    600: "#3A3D38",
+    700: "#252625",
+  },
+
+  "ghost": {
+    DEFAULT: "transparent",
+    100: "#252524"
+  },
+
+  // --- AUTRES COULEURS SIMPLES ---
+  "star": "#FEB63F",
+  "red": "#FF004D",
+  "green": "#00CC8E",
+  "blue": "#6366F1",
+  "yellow": "#F6AE2D",
+};
 
 const customSize = {
   '2xs': '1.25rem',

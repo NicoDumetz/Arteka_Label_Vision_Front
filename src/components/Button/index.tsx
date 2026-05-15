@@ -1,151 +1,57 @@
-import CircularProgressIcon from "@mui/icons-material/CachedOutlined";
-import type { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+// =============================================================
+//
+// ██╗  ██╗███████╗██╗  ██╗██╗ █████╗
+// ██║  ██║██╔════╝██║ ██╔╝██║██╔══██╗
+// ███████║█████╗  █████╔╝ ██║███████║
+// ██╔══██║██╔══╝  ██╔═██╗ ██║██╔══██║
+// ██║  ██║███████╗██║  ██╗██║██║  ██║
+// ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝
+//
+// File        : index.tsx
+// Project     : Arteka_Label_Vision_Front
+// Author      : Nicolas Dumetz
+//
+// Created     : Friday May 15 2026
+//
+// =============================================================
 
-import { cn } from "../../helpers/Cn";
-import { noop } from "../../helpers/Fn";
-import { isPromise } from "../../helpers/Promise";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 
-type ButtonSize = "xs" | "sm" | "base" | "lg" | "xl";
-type ButtonVariant = "solid" | "outline" | "ghost";
-type ButtonColor = "primary" | "secondary" | "tertiary" | "quaternary" | "error";
-type IconPosition = "left" | "right" | "top" | "bottom";
-
-const sizeClasses: Record<ButtonSize, string> = {
-  xs: "text-xs px-2.5 py-1.5",
-  sm: "text-sm px-3 py-2",
-  base: "text-base px-4 py-2.5",
-  lg: "text-lg px-5 py-3",
-  xl: "text-xl px-6 py-3.5",
-};
-
-const solidClasses: Record<ButtonColor, string> = {
-  primary: "border-primary bg-primary text-white hover:bg-primary-600",
-  secondary: "border-secondary bg-secondary text-dark hover:bg-secondary-500",
-  tertiary: "border-tertiary bg-tertiary text-white hover:bg-tertiary-500",
-  quaternary: "border-quaternary bg-quaternary text-white hover:bg-quaternary-500",
-  error: "border-error bg-error text-white hover:brightness-95",
-};
-
-const outlineClasses: Record<ButtonColor, string> = {
-  primary: "border-primary text-primary hover:bg-primary-100",
-  secondary: "border-secondary text-secondary hover:bg-secondary-100",
-  tertiary: "border-tertiary text-tertiary hover:bg-tertiary-100",
-  quaternary: "border-quaternary text-quaternary hover:bg-quaternary-100",
-  error: "border-error text-error hover:bg-red-50",
-};
-
-const ghostClasses: Record<ButtonColor, string> = {
-  primary: "border-transparent text-primary hover:bg-primary-100",
-  secondary: "border-transparent text-secondary hover:bg-secondary-100",
-  tertiary: "border-transparent text-tertiary hover:bg-tertiary-100",
-  quaternary: "border-transparent text-quaternary hover:bg-quaternary-100",
-  error: "border-transparent text-error hover:bg-red-50",
-};
-
-export interface ButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "color"> {
-  label?: string;
-  icon?: ReactNode;
-  iconPosition?: IconPosition;
-  color?: ButtonColor;
-  size?: ButtonSize;
-  variant?: ButtonVariant;
-  loading?: boolean;
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "ghost";
+  isLoading?: boolean;
 }
 
-export function Button({
-  className,
-  color = "primary",
-  disabled = false,
-  icon,
-  iconPosition = "left",
-  label,
-  loading = false,
-  onClick,
-  size = "base",
-  type = "button",
-  variant = "solid",
-  ...props
-}: ButtonProps) {
-  const [isLoading, setIsLoading] = useState(loading);
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, variant = "primary", isLoading, className = "", disabled, ...props }, ref) => {
+    const baseStyles = "relative flex w-full items-center justify-center rounded-md px-4 py-2.5 font-manrope-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed";
+    const variants = {
+      primary: "bg-primary text-white hover:bg-primary-600 border border-primary-600 shadow-sm",
+      secondary: "bg-dark text-white hover:bg-dark-shade border border-dark-contrast",
+      ghost: "bg-transparent text-subtitle-color hover:text-white hover:bg-dark-shade",
+    };
 
-  useEffect(() => {
-    setIsLoading(loading);
-  }, [loading]);
+    return (
+      <button
+        ref={ref}
+        disabled={disabled || isLoading}
+        className={`${baseStyles} ${variants[variant]} ${className}`}
+        {...props}
+      >
+        {isLoading ? (
+          <span className="flex items-center gap-2">
+            <svg className="h-4 w-4 animate-spin text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Chargement...
+          </span>
+        ) : (
+          children
+        )}
+      </button>
+    );
+  }
+);
 
-  const handleClick: MouseEventHandler<HTMLButtonElement> = async (event) => {
-    if (disabled || isLoading || !onClick) {
-      noop();
-      return;
-    }
-
-    const result = onClick(event);
-    if (!isPromise(result)) {
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await result;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const toneClasses =
-    variant === "outline"
-      ? outlineClasses[color]
-      : variant === "ghost"
-        ? ghostClasses[color]
-        : solidClasses[color];
-
-  const isVertical = iconPosition === "top" || iconPosition === "bottom";
-  const iconFirst = iconPosition === "left" || iconPosition === "top";
-
-  const content = (
-    <>
-      {icon && iconFirst ? <span className={cn(isLoading && "invisible")}>{icon}</span> : null}
-      {label ? <span className={cn(isLoading && "invisible")}>{label}</span> : null}
-      {icon && !iconFirst ? <span className={cn(isLoading && "invisible")}>{icon}</span> : null}
-    </>
-  );
-
-  return useMemo(
-    () => (
-    <button
-      {...props}
-      className={cn(
-        "relative inline-flex select-none items-center justify-center gap-2 rounded-md border font-medium transition focus:outline-none focus:ring-2 focus:ring-primary-200 focus:ring-offset-2",
-        sizeClasses[size],
-        toneClasses,
-        isVertical ? "flex-col" : "flex-row",
-        !label && icon ? "px-3" : undefined,
-        (disabled || isLoading) && "cursor-not-allowed opacity-60",
-        className,
-      )}
-      disabled={disabled || isLoading}
-      onClick={handleClick}
-      type={type}
-    >
-      {isLoading ? (
-        <CircularProgressIcon className="absolute animate-spin" fontSize="small" />
-      ) : null}
-      {content}
-    </button>
-    ),
-    [
-      className,
-      content,
-      disabled,
-      icon,
-      isLoading,
-      isVertical,
-      label,
-      props,
-      size,
-      toneClasses,
-      type,
-    ],
-  );
-}
+Button.displayName = "Button";

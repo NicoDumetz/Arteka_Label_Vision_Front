@@ -62,7 +62,7 @@ export function RequireAuth({ children, redirectTo = "/login" }: RequireAuthProp
   return <>{children}</>;
 }
 
-export function RequireGuest({ children, redirectTo = "/projects" }: RequireGuestProps) {
+export function RequireGuest({ children, redirectTo = "/" }: RequireGuestProps) {
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {

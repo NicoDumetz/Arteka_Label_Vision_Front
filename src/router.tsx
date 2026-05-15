@@ -18,27 +18,28 @@
 import { createBrowserRouter } from "react-router-dom";
 import { RequireAuth, RequireGuest, RequireGlobalRole, RequireProjectRole } from "~/components/RouteGuard";
 import Home from "~/view/Home";
-import Temp from "./view/Login";
+import Login from "./view/Login";
+import NotFound from "./view/NotFound";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/temp",
     element:
-    <RequireGlobalRole roles={["admin"]}>
-      <Temp />
-    </RequireGlobalRole>,
+    <RequireAuth>
+      <Home />
+    </RequireAuth>,
   },
   {
     path: "/login",
     element: (
       <RequireGuest>
-        <></>
+        <Login/>
       </RequireGuest>
     ),
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
   // {
   //   path: "/projects",
