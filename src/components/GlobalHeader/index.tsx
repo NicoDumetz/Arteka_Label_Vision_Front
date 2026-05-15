@@ -29,7 +29,7 @@ export function GlobalHeader({ transparent = false }: GlobalHeaderProps) {
   const navLinks = [
     { name: "Dashboard", path: "/" },
     { name: "Projects", path: "/projects" },
-    { name: "AI Models", path: "/global-models" },
+    { name: "Admin", path: "/admin" },
   ];
 
   return (

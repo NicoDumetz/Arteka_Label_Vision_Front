@@ -15,12 +15,16 @@
 //
 // =============================================================
 
-import { createBrowserRouter } from "react-router-dom";
-import { RequireAuth, RequireGuest } from "~/components/RouteGuard";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import { RequireAuth, RequireGuest, RequireGlobalRole } from "~/components/RouteGuard";
 import Home from "~/view/Home";
 import Login from "./view/Login";
 import NotFound from "./view/NotFound";
 import ProjectsPage from "./view/Project";
+import AdminEnginePage from "./view/Engine";
+import { AdminLayout } from "./view/Admin/Layout";
+import AdminInfraPage from "./view/Admin/infra";
+import AdminUsersPage from "./view/Admin/Access";
 
 export const router = createBrowserRouter([
   {
@@ -47,79 +51,34 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/admin",
+    element: (
+      <RequireGlobalRole roles={["admin"]}>
+        <AdminLayout /> {/* Le layout contenant la sidebar admin */}
+      </RequireGlobalRole>
+    ),
+    children: [
+      {
+        index: true,
+        // Redirection par défaut vers les utilisateurs
+        element: <Navigate to="/admin/users" replace />,
+      },
+      {
+        path: "users",
+        element: <AdminUsersPage />, // Identity & Access
+      },
+      {
+        path: "infrastructure",
+        element: <AdminInfraPage />, // Contient des sous-onglets (Health, Storage)
+      },
+      {
+        path: "engine",
+        element: <AdminEnginePage />, // Contient des sous-onglets (Adapters, Metadata)
+      },
+    ],
+  },
+  {
     path: "*",
     element: <NotFound />,
   },
-  // {
-  //   path: "/projects",
-  //   element: (
-  //     <RequireAuth>
-  //       <ProjectsPage />
-  //     </RequireAuth>
-  //   ),
-  // },
-  // {
-  //   path: "/projects/:projectId",
-  //   element: (
-  //     <RequireProjectRole roles={["owner", "manager", "annotator", "validator", "viewer"]}>
-  //       <ProjectDetailPage />
-  //     </RequireProjectRole>
-  //   ),
-  // },
-  // {
-  //   path: "/projects/:projectId/labels",
-  //   element: (
-  //     <RequireProjectRole roles={["owner", "manager"]}>
-  //       <ProjectLabelsPage />
-  //     </RequireProjectRole>
-  //   ),
-  // },
-  // {
-  //   path: "/projects/:projectId/assets",
-  //   element: (
-  //     <RequireProjectRole roles={["owner", "manager", "annotator", "validator", "viewer"]}>
-  //       <ProjectAssetsPage />
-  //     </RequireProjectRole>
-  //   ),
-  // },
-  // {
-  //   path: "/projects/:projectId/annotate",
-  //   element: (
-  //     <RequireProjectRole roles={["owner", "manager", "annotator"]}>
-  //       <ProjectAnnotationPage />
-  //     </RequireProjectRole>
-  //   ),
-  // },
-  // {
-  //   path: "/projects/:projectId/review",
-  //   element: (
-  //     <RequireProjectRole roles={["owner", "manager", "validator"]}>
-  //       <ProjectReviewPage />
-  //     </RequireProjectRole>
-  //   ),
-  // },
-  // {
-  //   path: "/projects/:projectId/models",
-  //   element: (
-  //     <RequireProjectRole roles={["owner", "manager"]}>
-  //       <ProjectModelsPage />
-  //     </RequireProjectRole>
-  //   ),
-  // },
-  // {
-  //   path: "/projects/:projectId/exports",
-  //   element: (
-  //     <RequireProjectRole roles={["owner", "manager", "annotator", "validator", "viewer"]}>
-  //       <ProjectExportsPage />
-  //     </RequireProjectRole>
-  //   ),
-  // },
-  // {
-  //   path: "/admin/users",
-  //   element: (
-  //     <RequireGlobalRole roles={["admin"]}>
-  //       <AdminUsersPage />
-  //     </RequireGlobalRole>
-  //   ),
-  // },
 ]);

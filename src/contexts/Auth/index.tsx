@@ -75,7 +75,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, [session, saveSession]);
 
   useEffect(() => {
-    setUnauthorizedHandler(() => logout);
+    setUnauthorizedHandler(() => {
+      logout();
+
+      if (window.location.pathname !== "/login") {
+        window.location.replace("/login");
+      }
+    });
 
     return () => {
       setUnauthorizedHandler(null);
