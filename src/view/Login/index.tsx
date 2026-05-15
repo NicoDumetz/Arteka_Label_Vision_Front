@@ -7,7 +7,7 @@
 // ██║  ██║███████╗██║  ██╗██║██║  ██║
 // ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝
 //
-// File        : index.ts
+// File        : index.tsx
 // Project     : Arteka_Label_Vision_Front
 // Author      : Nicolas Dumetz
 //
@@ -15,26 +15,11 @@
 //
 // =============================================================
 
-/* Helpers */
-import Api from "~/helpers/api/index";
 
-/* Types */
-import type { ApiRequest } from "~/types/api";
+export default function Temp() {
 
-// TEMPLATE D'API CALL
-
-export class Bookmarks {
-  static endpoint = "/tbx/account/bookmarks";
-
-  static getBookmarks(): ApiRequest<string[]> {
-    return Api.get<string[]>(Bookmarks.endpoint);
-  }
-
-  static addBookmark(bookmark: string): ApiRequest<string> {
-    return Api.post<string, { bookmark: string }>(Bookmarks.endpoint, { bookmark });
-  }
-
-  static deleteBookmark(bookmark: string): ApiRequest<string> {
-    return Api.delete<string>(`${Bookmarks.endpoint}?bookmark=${encodeURIComponent(bookmark)}`);
-  }
+  return (
+    <main className="text-black text-[15rem] h-screen w-screen flex justify-center items-center">
+test    </main>
+  );
 }

@@ -15,26 +15,19 @@
 //
 // =============================================================
 
-/* Helpers */
-import Api from "~/helpers/api/index";
+import type { User, UserRole } from "~/types/models";
 
-/* Types */
-import type { ApiRequest } from "~/types/api";
+export interface AuthSession {
+  access_token: string;
+  user: User;
+}
 
-// TEMPLATE D'API CALL
-
-export class Bookmarks {
-  static endpoint = "/tbx/account/bookmarks";
-
-  static getBookmarks(): ApiRequest<string[]> {
-    return Api.get<string[]>(Bookmarks.endpoint);
-  }
-
-  static addBookmark(bookmark: string): ApiRequest<string> {
-    return Api.post<string, { bookmark: string }>(Bookmarks.endpoint, { bookmark });
-  }
-
-  static deleteBookmark(bookmark: string): ApiRequest<string> {
-    return Api.delete<string>(`${Bookmarks.endpoint}?bookmark=${encodeURIComponent(bookmark)}`);
-  }
+export interface AuthContextValue {
+  user: User | null;
+  role: UserRole | null;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, username: string) => Promise<void>;
+  logout: () => void;
+  refreshUser: () => Promise<void>;
 }

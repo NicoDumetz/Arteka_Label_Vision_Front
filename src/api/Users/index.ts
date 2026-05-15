@@ -15,26 +15,24 @@
 //
 // =============================================================
 
-/* Helpers */
-import Api from "~/helpers/api/index";
+import Api from "~/helpers/api";
+import type { ApiMessageResponse, ApiRequest, UserListResponse, UserUpdatePayload } from "~/types/api";
+import type { ID, User } from "~/types/models";
 
-/* Types */
-import type { ApiRequest } from "~/types/api";
-
-// TEMPLATE D'API CALL
-
-export class Bookmarks {
-  static endpoint = "/tbx/account/bookmarks";
-
-  static getBookmarks(): ApiRequest<string[]> {
-    return Api.get<string[]>(Bookmarks.endpoint);
+export class Users {
+  static list(params?: Record<string, unknown>): ApiRequest<UserListResponse> {
+    return Api.get<UserListResponse>("/users", { params });
   }
 
-  static addBookmark(bookmark: string): ApiRequest<string> {
-    return Api.post<string, { bookmark: string }>(Bookmarks.endpoint, { bookmark });
+  static get(userId: ID): ApiRequest<User> {
+    return Api.get<User>(`/users/${userId}`);
   }
 
-  static deleteBookmark(bookmark: string): ApiRequest<string> {
-    return Api.delete<string>(`${Bookmarks.endpoint}?bookmark=${encodeURIComponent(bookmark)}`);
+  static update(userId: ID, payload: UserUpdatePayload): ApiRequest<User> {
+    return Api.patch<User, UserUpdatePayload>(`/users/${userId}`, payload);
+  }
+
+  static delete(userId: ID): ApiRequest<ApiMessageResponse> {
+    return Api.delete<ApiMessageResponse>(`/users/${userId}`);
   }
 }

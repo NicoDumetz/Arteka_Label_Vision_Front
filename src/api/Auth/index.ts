@@ -15,26 +15,24 @@
 //
 // =============================================================
 
-/* Helpers */
-import Api from "~/helpers/api/index";
+import Api from "~/helpers/api";
+import type { ApiRequest, AuthResponse, LoginPayload, PasswordChangePayload, RegisterPayload } from "~/types/api";
+import type { User } from "~/types/models";
 
-/* Types */
-import type { ApiRequest } from "~/types/api";
-
-// TEMPLATE D'API CALL
-
-export class Bookmarks {
-  static endpoint = "/tbx/account/bookmarks";
-
-  static getBookmarks(): ApiRequest<string[]> {
-    return Api.get<string[]>(Bookmarks.endpoint);
+export class Auth {
+  static register(payload: RegisterPayload): ApiRequest<AuthResponse> {
+    return Api.post<AuthResponse, RegisterPayload>("/auth/register", payload, { withAuth: false });
   }
 
-  static addBookmark(bookmark: string): ApiRequest<string> {
-    return Api.post<string, { bookmark: string }>(Bookmarks.endpoint, { bookmark });
+  static login(payload: LoginPayload): ApiRequest<AuthResponse> {
+    return Api.post<AuthResponse, LoginPayload>("/auth/login", payload, { withAuth: false });
   }
 
-  static deleteBookmark(bookmark: string): ApiRequest<string> {
-    return Api.delete<string>(`${Bookmarks.endpoint}?bookmark=${encodeURIComponent(bookmark)}`);
+  static me(): ApiRequest<User> {
+    return Api.get<User>("/auth/me");
+  }
+
+  static changePassword(payload: PasswordChangePayload): ApiRequest<User> {
+    return Api.post<User, PasswordChangePayload>("/auth/password/change", payload);
   }
 }
