@@ -39,11 +39,10 @@ import {
 import type { ActiveTabId, FrameCandidateWithSelection, ImportStep } from "./types";
 import {
   addOrUpdateCandidate,
-  getFileExtension,
   getSelectedCandidateIdsByAsset,
-  sleep,
   sortFilesByImportPriority,
 } from "./utils";
+import { getFileExtension, sleep } from "~/helpers/media";
 
 export default function WorkspaceAssetImport() {
   const { project } = useWorkspace();
@@ -78,7 +77,9 @@ export default function WorkspaceAssetImport() {
   );
 
   const selectedAsset = typeof activeTabId === "number" ? mediaAssets.find((asset) => asset.id === activeTabId) ?? null : null;
-  const selectedAssetUrl = getMediaUrl(selectedAsset?.storage_path);
+  const selectedAssetUrl = getMediaUrl(
+    selectedAsset?.playback_path ?? selectedAsset?.preview_path ?? selectedAsset?.storage_path,
+  );
   const selectedFramesCount = frameCandidates.filter((candidate) => candidate.selected).length;
   const selectedReviewCandidates = frameCandidates.filter((candidate) => candidate.selected);
   const canFinalize = pendingStaticFiles.length > 0 || selectedFramesCount > 0;

@@ -17,7 +17,7 @@
 
 import { useEffect, useState } from "react";
 import { IMAGE_EXTENSIONS } from "../constants";
-import { getFileExtension } from "../utils";
+import { getFileExtension } from "~/helpers/media";
 import { cn } from "~/helpers/Cn";
 
 interface LocalFileCardProps {

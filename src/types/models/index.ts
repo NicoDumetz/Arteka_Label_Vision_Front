@@ -125,6 +125,7 @@ export interface Asset {
   filename: string;
   original_filename: string | null;
   storage_path: string;
+  playback_path: string | null;
   preview_path: string | null;
   media_type: AssetMediaType;
   mime_type: string | null;
