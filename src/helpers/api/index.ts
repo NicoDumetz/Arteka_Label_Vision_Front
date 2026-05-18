@@ -63,6 +63,10 @@ class ApiHelper {
       nextConfig.headers.set("Authorization", `Bearer ${token}`);
     }
 
+    if (nextConfig.data instanceof FormData) {
+      nextConfig.headers.delete("Content-Type");
+    }
+
     return nextConfig;
   }
 

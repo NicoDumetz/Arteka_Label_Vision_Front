@@ -24,6 +24,7 @@ import { GlobalHeader } from "~/components/GlobalHeader";
 import { SearchInput } from "~/components/SearchInput";
 import { ConfirmModal } from "~/components/ConfirmModal";
 import { CreateProjectModal } from "./createProject";
+import { getApiErrorMessage } from "~/helpers/api";
 import { useListQueryParams } from "~/hooks/useListQueryParams";
 import type { Project, ProjectStatus, TaskType } from "~/types/models";
 
@@ -60,6 +61,7 @@ export default function ProjectsPage() {
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isConfirmingAction, setIsConfirmingAction] = useState(false);
   
   const loadMoreMarkerRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
@@ -133,19 +135,26 @@ export default function ProjectsPage() {
 
   const executeConfirmAction = async () => {
     if (!confirmModal.project || !confirmModal.type) return;
+
+    setIsConfirmingAction(true);
+    setErrorMessage(null);
+
     try {
       if (confirmModal.type === "delete") {
-        await Projects.delete(confirmModal.project.id);
+        await Projects.purge(confirmModal.project.id);
         setProjects(prev => prev.filter(p => p.id !== confirmModal.project!.id));
       } else if (confirmModal.type === "archive") {
         await Projects.archive(confirmModal.project.id);
         setProjects(prev => prev.map(p => p.id === confirmModal.project!.id ? { ...p, status: "archived" } : p));
       }
     } catch (error) {
-      console.error(`Failed to ${confirmModal.type} project`, error);
+      setErrorMessage(getApiErrorMessage(error, `Unable to ${confirmModal.type} workspace.`));
+      return;
     } finally {
-      setConfirmModal({ isOpen: false, type: null, project: null });
+      setIsConfirmingAction(false);
     }
+
+    setConfirmModal({ isOpen: false, type: null, project: null });
   };
 
   const handleProjectCreated = (newProject: Project) => {
@@ -243,7 +252,7 @@ export default function ProjectsPage() {
               {projects.map((project) => (
                 <div 
                   key={project.id} 
-                  onClick={() => navigate(`/projects/${project.id}`)}
+                  onClick={() => navigate(`/workspaces/${project.id}`)}
                   className="group relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl transition-all hover:-translate-y-1 hover:bg-white/[0.06] hover:border-white/20 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
                 >
                   <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-primary-500/0 blur-[50px] mix-blend-screen transition-colors duration-500 group-hover:bg-primary-500/30" />
@@ -334,11 +343,12 @@ export default function ProjectsPage() {
         title={confirmModal.type === "delete" ? "Delete Workspace" : "Archive Workspace"}
         message={
           confirmModal.type === "delete" 
-            ? `You are about to permanently delete "${confirmModal.project?.name}". All associated assets and annotations will be destroyed. This cannot be undone.`
+            ? `You are about to purge "${confirmModal.project?.name}". Assets, items, annotations, reviews, jobs, models and storage references will be removed or queued for cleanup. This cannot be undone.`
             : `You are about to archive "${confirmModal.project?.name}". The workspace will be locked in read-only mode.`
         }
         onConfirm={executeConfirmAction}
         onClose={() => setConfirmModal({ isOpen: false, type: null, project: null })}
+        isLoading={isConfirmingAction}
       />
     </div>
   );

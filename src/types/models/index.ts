@@ -237,6 +237,17 @@ export interface Annotation {
   updated_at: ISODateString;
 }
 
+export interface AnnotationListItem {
+  id: ID;
+  item_id: ID;
+  task_type: TaskType;
+  source: AnnotationSource;
+  status: AnnotationStatus;
+  created_by: ID | null;
+  model_version_id: ID | null;
+  created_at: ISODateString;
+}
+
 export interface AnnotationReview {
   id: ID;
   annotation_id: ID;

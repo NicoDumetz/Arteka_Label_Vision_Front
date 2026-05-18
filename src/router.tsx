@@ -16,7 +16,7 @@
 // =============================================================
 
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { RequireAuth, RequireGuest, RequireGlobalRole } from "~/components/RouteGuard";
+import { RequireAuth, RequireGuest, RequireGlobalRole, RequireProjectRole } from "~/components/RouteGuard";
 import Home from "~/view/Home";
 import Login from "./view/Login";
 import NotFound from "./view/NotFound";
@@ -25,6 +25,10 @@ import AdminEnginePage from "./view/Engine";
 import { AdminLayout } from "./view/Admin/Layout";
 import AdminInfraPage from "./view/Admin/infra";
 import AdminUsersPage from "./view/Admin/Access";
+import Workspace from "./view/Workspace/Layout";
+import WorkspaceHome from "./view/Workspace/Home";
+import WorkspaceItems from "./view/Workspace/Items";
+import WorkspaceAssetImport from "./view/Workspace/Assets";
 
 export const router = createBrowserRouter([
   {
@@ -54,26 +58,91 @@ export const router = createBrowserRouter([
     path: "/admin",
     element: (
       <RequireGlobalRole roles={["admin"]}>
-        <AdminLayout /> {/* Le layout contenant la sidebar admin */}
+        <AdminLayout />
       </RequireGlobalRole>
     ),
     children: [
       {
         index: true,
-        // Redirection par défaut vers les utilisateurs
         element: <Navigate to="/admin/users" replace />,
       },
       {
         path: "users",
-        element: <AdminUsersPage />, // Identity & Access
+        element: <AdminUsersPage />,
       },
       {
         path: "infrastructure",
-        element: <AdminInfraPage />, // Contient des sous-onglets (Health, Storage)
+        element: <AdminInfraPage />,
       },
       {
         path: "engine",
-        element: <AdminEnginePage />, // Contient des sous-onglets (Adapters, Metadata)
+        element: <AdminEnginePage />,
+      },
+    ],
+  },
+  {
+    path: "/workspaces/:projectId",
+    element: (
+      <RequireProjectRole roles={["owner", "manager", "annotator", "validator", "viewer"]}>
+        <Workspace />
+      </RequireProjectRole>
+    ),
+    children: [
+      {
+        index: true,
+        element: <WorkspaceHome/>,
+      },
+      {
+        path: "assets",
+        element: <WorkspaceAssetImport/>,
+      },
+      {
+        path: "items",
+        element: <WorkspaceItems/>,
+      },
+      {
+        path: "annotate",
+        element: (
+          <RequireProjectRole roles={["owner", "manager", "annotator"]}>
+            <></>
+          </RequireProjectRole>
+        ),
+      },
+      {
+        path: "review",
+        element: (
+          <RequireProjectRole roles={["owner", "manager", "validator"]}>
+            <></>
+          </RequireProjectRole>
+        ),
+      },
+      {
+        path: "labels",
+        element: (
+          <RequireProjectRole roles={["owner", "manager"]}>
+            <></>
+          </RequireProjectRole>
+        ),
+      },
+      {
+        path: "models",
+        element: (
+          <RequireProjectRole roles={["owner", "manager"]}>
+            <></>
+          </RequireProjectRole>
+        ),
+      },
+      {
+        path: "exports",
+        element: <></>,
+      },
+      {
+        path: "settings",
+        element: (
+          <RequireProjectRole roles={["owner", "manager"]}>
+            <></>
+          </RequireProjectRole>
+        ),
       },
     ],
   },

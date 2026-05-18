@@ -24,6 +24,7 @@ import type {
   ProjectMemberCreatePayload,
   ProjectMemberUpdatePayload,
   ProjectMembersResponse,
+  ProjectPurgeResponse,
   ProjectUpdatePayload,
 } from "~/types/api";
 import type { ID, Project, ProjectMember } from "~/types/models";
@@ -47,6 +48,10 @@ export class Projects {
 
   static delete(projectId: ID): ApiRequest<ApiMessageResponse> {
     return Api.delete<ApiMessageResponse>(`/projects/${projectId}`);
+  }
+
+  static purge(projectId: ID): ApiRequest<ProjectPurgeResponse> {
+    return Api.delete<ProjectPurgeResponse>(`/projects/${projectId}/purge`);
   }
 
   static activate(projectId: ID): ApiRequest<Project> {

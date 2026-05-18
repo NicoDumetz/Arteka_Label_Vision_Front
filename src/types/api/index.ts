@@ -19,6 +19,7 @@ import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import type {
   AdapterConfigTemplate,
   Annotation,
+  AnnotationListItem,
   AnnotationPayload,
   Asset,
   DatasetVersion,
@@ -119,6 +120,12 @@ export interface ProjectUpdatePayload {
   name?: string;
   description?: string | null;
   status?: ProjectStatus;
+}
+
+export interface ProjectPurgeResponse {
+  detail: string;
+  project_id: ID;
+  storage_files_marked_pending_delete: number;
 }
 
 export interface ProjectMemberCreatePayload {
@@ -339,4 +346,4 @@ export type AdapterTemplatesResponse = AdapterConfigTemplate[];
 export type LabelsResponse = Label[];
 export type ProjectMembersResponse = ProjectMember[];
 export type FrameCandidatesResponse = FrameCandidate[];
-export type AnnotationsResponse = Annotation[];
+export type AnnotationsResponse = AnnotationListItem[];
