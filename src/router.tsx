@@ -30,6 +30,7 @@ import WorkspaceHome from "./view/Workspace/Home";
 import WorkspaceItems from "./view/Workspace/Data";
 import WorkspaceAssetImport from "./view/Workspace/Import";
 import WorkspaceLabels from "./view/Workspace/Labels";
+import WorkspaceModels from "./view/Workspace/Models";
 
 export const router = createBrowserRouter([
   {
@@ -129,7 +130,7 @@ export const router = createBrowserRouter([
         path: "models",
         element: (
           <RequireProjectRole roles={["owner", "manager"]}>
-            <></>
+            <WorkspaceModels/>
           </RequireProjectRole>
         ),
       },

@@ -31,6 +31,8 @@ import type {
   JobStatus,
   Label,
   ModelAdapter,
+  ModelOutputMode,
+  ModelOutputValue,
   ModelVersion,
   PredictionJob,
   Project,
@@ -221,6 +223,7 @@ export interface ModelUploadPayload {
   file: File;
   adapter_id: ID;
   name: string;
+  version?: string | null;
   architecture?: string | null;
   task_type: TaskType;
   config: Record<string, unknown>;
@@ -228,8 +231,18 @@ export interface ModelUploadPayload {
 
 export interface ModelUpdatePayload {
   name?: string;
+  version?: string | null;
   architecture?: string | null;
   config?: Record<string, unknown>;
+}
+
+export interface ModelAdapterListParams {
+  task_type?: TaskType;
+  status?: string;
+  limit?: number;
+  cursor?: string | null;
+  search?: string;
+  search_mode?: "contains" | "prefix";
 }
 
 export interface PredictionCreatePayload {
@@ -239,13 +252,29 @@ export interface PredictionCreatePayload {
 
 export interface PredictionBatchPayload {
   model_version_id?: ID | null;
-  item_ids: ID[];
+  item_ids?: ID[];
   config?: Record<string, unknown> | null;
+}
+
+export interface PredictionBatchJobSummary {
+  id: ID;
+  item_id: ID;
+  status: JobStatus;
+  annotation_id: ID | null;
+  error: string | null;
+}
+
+export interface PredictionBatchError {
+  item_id: ID | null;
+  code: string;
+  message: string;
+  details?: Record<string, unknown> | null;
 }
 
 export interface PredictionBatchResponse {
   created_count: number;
-  jobs: PredictionJob[];
+  jobs: PredictionBatchJobSummary[];
+  errors: PredictionBatchError[];
 }
 
 export interface TrainingSettingsUpdatePayload {
@@ -285,6 +314,7 @@ export interface MetadataItem {
   key: string;
   name?: string;
   description?: string;
+  extension?: string;
   supported_extensions?: string[];
   status?: string;
 }
@@ -304,13 +334,13 @@ export interface MetadataStatusesResponse {
 }
 
 export interface MetadataModelOutputModesResponse {
-  classification: MetadataItem[];
-  detection: MetadataItem[];
-  segmentation: MetadataItem[];
+  classification: Array<MetadataItem & { key: ModelOutputMode }>;
+  detection: Array<MetadataItem & { key: ModelOutputMode }>;
+  segmentation: Array<MetadataItem & { key: ModelOutputMode }>;
 }
 
 export interface MetadataModelOutputValuesResponse {
-  output_values: MetadataItem[];
+  output_values: Array<MetadataItem & { key: ModelOutputValue }>;
 }
 
 export interface MetadataMediaTypesResponse {
@@ -340,8 +370,9 @@ export type DatasetVersionListResponse = CursorPage<DatasetVersion>;
 export type ExportJobListResponse = CursorPage<ExportJob>;
 export type TrainingJobListResponse = CursorPage<TrainingJob>;
 export type ModelVersionListResponse = CursorPage<ModelVersion>;
+export type PredictionJobListResponse = CursorPage<PredictionJob>;
 
-export type ModelAdaptersResponse = ModelAdapter[];
+export type ModelAdaptersResponse = CursorPage<ModelAdapter>;
 export type AdapterTemplatesResponse = AdapterConfigTemplate[];
 export type LabelsResponse = Label[];
 export type ProjectMembersResponse = ProjectMember[];

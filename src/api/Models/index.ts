@@ -20,6 +20,7 @@ import type {
   AdapterTemplatesResponse,
   ApiMessageResponse,
   ApiRequest,
+  ModelAdapterListParams,
   ModelAdaptersResponse,
   ModelUpdatePayload,
   ModelUploadPayload,
@@ -28,8 +29,8 @@ import type {
 import type { ID, ModelAdapter, ModelVersion } from "~/types/models";
 
 export class Models {
-  static listAdapters(): ApiRequest<ModelAdaptersResponse> {
-    return Api.get<ModelAdaptersResponse>("/model-adapters");
+  static listAdapters(params?: ModelAdapterListParams): ApiRequest<ModelAdaptersResponse> {
+    return Api.get<ModelAdaptersResponse>("/model-adapters", { params });
   }
 
   static getAdapter(adapterId: ID): ApiRequest<ModelAdapter> {
@@ -43,11 +44,15 @@ export class Models {
   static upload(projectId: ID, payload: ModelUploadPayload): ApiRequest<ModelVersion> {
     const formData = new FormData();
 
-    formData.append("file", payload.file);
+    formData.append("checkpoint_file", payload.file);
     formData.append("adapter_id", String(payload.adapter_id));
     formData.append("name", payload.name);
     formData.append("task_type", payload.task_type);
     formData.append("config", JSON.stringify(payload.config));
+
+    if (payload.version) {
+      formData.append("version", payload.version);
+    }
 
     if (payload.architecture) {
       formData.append("architecture", payload.architecture);

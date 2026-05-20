@@ -37,7 +37,7 @@ export type DatasetVersionStatus = "draft" | "frozen" | "archived";
 
 export type ModelSource = "uploaded" | "trained";
 export type ModelStatus = "draft" | "validating" | "ready" | "failed" | "archived";
-export type AdapterStatus = "active" | "inactive" | "archived";
+export type AdapterStatus = "active" | "disabled";
 
 export type ModelOutputMode = "single_label" | "multi_label" | "binary_mask" | "multiclass_mask" | "instance_masks" | "adapter_postprocessed";
 export type ModelOutputValue = "logits" | "probabilities" | "class_indices" | "adapter_postprocessed";
@@ -263,16 +263,16 @@ export interface ModelAdapter {
   id: ID;
   key: string;
   name: string;
-  description: string | null;
+  description?: string | null;
   task_type: TaskType;
   status: AdapterStatus;
-  supported_architectures: string[] | null;
-  supported_output_modes: string[] | null;
-  supported_output_values: string[] | null;
-  default_config: Record<string, unknown>;
-  config_schema: Record<string, unknown>;
-  created_at: ISODateString;
-  updated_at: ISODateString;
+  supported_architectures: string[];
+  supported_output_modes: ModelOutputMode[];
+  supported_output_values: ModelOutputValue[];
+  default_config?: Record<string, unknown>;
+  config_schema?: Record<string, unknown>;
+  created_at?: ISODateString;
+  updated_at?: ISODateString;
 }
 
 export interface AdapterConfigTemplate {
@@ -290,19 +290,24 @@ export interface AdapterConfigTemplate {
 export interface ModelVersion {
   id: ID;
   project_id: ID;
+  created_by: ID | null;
   adapter_id: ID;
+  adapter?: {
+    id: ID;
+    key: string;
+  } | null;
   name: string;
+  version: string | null;
   source: ModelSource;
   task_type: TaskType;
   architecture: string | null;
   status: ModelStatus;
   is_active: boolean;
   checkpoint_path: string | null;
-  original_filename: string | null;
+  original_filename?: string | null;
   config: Record<string, unknown>;
   metrics: Record<string, unknown> | null;
   validation_error: string | null;
-  created_by: ID | null;
   created_at: ISODateString;
   updated_at: ISODateString;
 }
@@ -311,9 +316,10 @@ export interface PredictionJob {
   id: ID;
   project_id: ID;
   item_id: ID;
-  model_version_id: ID;
+  model_version_id: ID | null;
   annotation_id: ID | null;
   status: JobStatus;
+  config?: Record<string, unknown> | null;
   error: string | null;
   created_by: ID | null;
   created_at: ISODateString;

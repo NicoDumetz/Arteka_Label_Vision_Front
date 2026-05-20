@@ -16,7 +16,13 @@
 // =============================================================
 
 import Api from "~/helpers/api";
-import type { ApiRequest, PredictionBatchPayload, PredictionBatchResponse, PredictionCreatePayload } from "~/types/api";
+import type {
+  ApiRequest,
+  PredictionBatchPayload,
+  PredictionBatchResponse,
+  PredictionCreatePayload,
+  PredictionJobListResponse,
+} from "~/types/api";
 import type { ID, PredictionJob } from "~/types/models";
 
 export class Predictions {
@@ -26,6 +32,10 @@ export class Predictions {
 
   static predictBatch(projectId: ID, payload: PredictionBatchPayload): ApiRequest<PredictionBatchResponse> {
     return Api.post<PredictionBatchResponse, PredictionBatchPayload>(`/projects/${projectId}/predict-batch`, payload);
+  }
+
+  static list(projectId: ID, params?: Record<string, unknown>): ApiRequest<PredictionJobListResponse> {
+    return Api.get<PredictionJobListResponse>(`/projects/${projectId}/prediction-jobs`, { params });
   }
 
   static get(jobId: ID): ApiRequest<PredictionJob> {
