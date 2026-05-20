@@ -66,7 +66,7 @@ function cloneDefaultLabels(taskType: TaskType): LabelDraft[] {
 
 export function CreateProjectModal({ isOpen, onClose, onSuccess }: CreateProjectModalProps) {
   const navigate = useNavigate();
-  const [intent, setIntent] = useState<"import_data" | "upload_model" | "configure_training">("import_data");
+  const [intent, setIntent] = useState<"import_data" | "upload_model" | "configure_training" | null>(null);
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -80,6 +80,9 @@ export function CreateProjectModal({ isOpen, onClose, onSuccess }: CreateProject
     onSuccess(project);
     resetForm();
     switch(intent) {
+      case null:
+        navigate("/projects");
+        break;
       case "upload_model":
         navigate(`/workspaces/${project.id}/models`);
         break;
@@ -111,7 +114,7 @@ export function CreateProjectModal({ isOpen, onClose, onSuccess }: CreateProject
     setTaskType("detection");
     setLabels(cloneDefaultLabels("detection"));
     setDraftLabel({ name: "", color: "#8b5cf6", description: "" });
-    setIntent("import_data");
+    setIntent(null);
     setError(null);
     setIsLoading(false);
   };
@@ -518,7 +521,7 @@ export function CreateProjectModal({ isOpen, onClose, onSuccess }: CreateProject
 
               <div className="grid grid-cols-1 gap-4">
                 <button
-                  onClick={() => setIntent("import_data")}
+                  onClick={() => setIntent((current) => current === "import_data" ? null : "import_data")}
                   className={cn(
                     "flex items-start gap-4 rounded-2xl border p-6 text-left transition-all",
                     intent === "import_data" ? "border-primary-500 bg-primary-500/10" : "border-white/10 bg-white/[0.02] hover:border-white/20"
@@ -535,7 +538,7 @@ export function CreateProjectModal({ isOpen, onClose, onSuccess }: CreateProject
 
                 {/* 2. Upload Model */}
                 <button
-                  onClick={() => setIntent("upload_model")}
+                  onClick={() => setIntent((current) => current === "upload_model" ? null : "upload_model")}
                   className={cn(
                     "flex items-start gap-4 rounded-2xl border p-6 text-left transition-all",
                     intent === "upload_model" ? "border-primary-500 bg-primary-500/10" : "border-white/10 bg-white/[0.02] hover:border-white/20"
@@ -553,7 +556,7 @@ export function CreateProjectModal({ isOpen, onClose, onSuccess }: CreateProject
                 {taskType === "classification" && (
                   <button
                     type="button"
-                    onClick={() => setIntent("configure_training")}
+                    onClick={() => setIntent((current) => current === "configure_training" ? null : "configure_training")}
                     className={cn(
                       "flex items-start gap-4 rounded-2xl border p-6 text-left transition-all",
                       intent === "configure_training"

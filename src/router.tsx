@@ -29,6 +29,7 @@ import Workspace from "./view/Workspace/Layout";
 import WorkspaceHome from "./view/Workspace/Home";
 import WorkspaceItems from "./view/Workspace/Data";
 import WorkspaceAssetImport from "./view/Workspace/Import";
+import WorkspaceLabels from "./view/Workspace/Labels";
 
 export const router = createBrowserRouter([
   {
@@ -120,7 +121,7 @@ export const router = createBrowserRouter([
         path: "labels",
         element: (
           <RequireProjectRole roles={["owner", "manager"]}>
-            <></>
+            <WorkspaceLabels/>
           </RequireProjectRole>
         ),
       },
