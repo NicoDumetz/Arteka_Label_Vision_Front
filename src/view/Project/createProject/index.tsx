@@ -84,7 +84,7 @@ export function CreateProjectModal({ isOpen, onClose, onSuccess }: CreateProject
         navigate(`/workspaces/${project.id}/models`);
         break;
       case "import_data":
-        navigate(`/workspaces/${project.id}/assets`);
+        navigate(`/workspaces/${project.id}/import`);
         break;
       case "configure_training":
       default:

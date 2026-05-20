@@ -29,13 +29,14 @@ function WorkspaceContent() {
   // Définition dynamique des onglets selon les permissions
   const tabs = [
     { name: "Overview", path: baseUrl, isVisible: true },
-    { name: "Assets", path: `${baseUrl}/assets`, isVisible: true },
-    { name: "Items", path: `${baseUrl}/items`, isVisible: true },
+    { name: "Import", path: `${baseUrl}/import`, isVisible: true },
+    { name: "Data", path: `${baseUrl}/data`, isVisible: true },
     { name: "Annotation", path: `${baseUrl}/annotate`, isVisible: canAnnotate },
     { name: "Validation", path: `${baseUrl}/review`, isVisible: canReview },
     { name: "Labels", path: `${baseUrl}/labels`, isVisible: canManageProject },
     { name: "Models", path: `${baseUrl}/models`, isVisible: canManageModels },
     { name: "Exports", path: `${baseUrl}/exports`, isVisible: true },
+    { name: "Training", path: `${baseUrl}/training`, isVisible: canManageProject },
     { name: "Settings", path: `${baseUrl}/settings`, isVisible: canManageProject },
   ].filter(tab => tab.isVisible);
 

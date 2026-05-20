@@ -27,8 +27,8 @@ import AdminInfraPage from "./view/Admin/infra";
 import AdminUsersPage from "./view/Admin/Access";
 import Workspace from "./view/Workspace/Layout";
 import WorkspaceHome from "./view/Workspace/Home";
-import WorkspaceItems from "./view/Workspace/Items";
-import WorkspaceAssetImport from "./view/Workspace/Assets";
+import WorkspaceItems from "./view/Workspace/Data";
+import WorkspaceAssetImport from "./view/Workspace/Import";
 
 export const router = createBrowserRouter([
   {
@@ -93,11 +93,11 @@ export const router = createBrowserRouter([
         element: <WorkspaceHome/>,
       },
       {
-        path: "assets",
+        path: "import",
         element: <WorkspaceAssetImport/>,
       },
       {
-        path: "items",
+        path: "Data",
         element: <WorkspaceItems/>,
       },
       {
@@ -135,6 +135,14 @@ export const router = createBrowserRouter([
       {
         path: "exports",
         element: <></>,
+      },
+      {
+        path: "training",
+        element: (
+          <RequireProjectRole roles={["owner", "manager"]}>
+            <></>
+          </RequireProjectRole>
+        ),
       },
       {
         path: "settings",
